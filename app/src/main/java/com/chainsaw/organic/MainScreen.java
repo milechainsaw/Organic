@@ -21,6 +21,7 @@ public class MainScreen extends Activity {
         setContentView(R.layout.activity_main_screen);
         imageView = (ImageView) findViewById(R.id.imgViewDisplay);
         imageView.setClickable(true);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -33,13 +34,16 @@ public class MainScreen extends Activity {
         Log.i("Generator", "Started generation...");
         int width = imageView.getWidth();
         int height = imageView.getHeight();
-        Log.i("Generator", "Image size " + width + " x " + height);
 
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        int randomize = (int)(Math.random() * 789221);
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
+        int x = height;
+        int y = width;
+
+        Bitmap bitmap = Bitmap.createBitmap(x, y, Bitmap.Config.ARGB_8888);
+        int randomize = (int) (Math.random() * 789221);
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
                 int pixel = NoiseGenerator.noise(i / 128f, j / 128f, 7, randomize);
+
                 int red = pixel;
                 int green = pixel;
                 int blue = pixel;
@@ -53,9 +57,24 @@ public class MainScreen extends Activity {
                 bitmap.setPixel(i, j, RGB);
             }
         }
-        Log.i("Generator", "DONE!!! " + randomize);
-        imageView.setImageBitmap(bitmap);
 
+        imageView.setImageBitmap(scaleToFit(bitmap, width, height));
+        bitmap.recycle();
+        Log.i("Generator", "Image size " + width + " x " + height);
+        Log.i("Generator", "DONE!!! " + randomize);
+    }
+
+    private Bitmap scaleToFit(Bitmap bitmap, int width, int height) {
+        int k;
+        if (height > width) {
+            k = height / bitmap.getHeight();
+        } else {
+            k = width / bitmap.getWidth();
+        }
+        int newWidth = bitmap.getWidth() * k;
+        int newHeight = bitmap.getHeight() * k;
+        Log.i("Scaler", "x=" + newWidth + " y=" + newHeight);
+        return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, false);
     }
 
 
