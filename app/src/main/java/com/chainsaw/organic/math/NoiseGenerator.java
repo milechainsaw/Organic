@@ -17,11 +17,11 @@ public class NoiseGenerator {
      * you can change type of noise between grad & value noise by commenting/uncommenting block
      * you can change type of interpolation between bicubic/bilinear by commenting/uncommenting block
      */
-    public static int noise(double x, double y, int nbOctave) {
+    public static int noise(double x, double y, int nbOctave, int randomize) {
         int result = 0;
-        int frequence256 = 256;
-        int sx = (int) ((x) * frequence256);
-        int sy = (int) ((y) * frequence256);
+        int frequency256 = 256;
+        int sx = (int) ((x) * frequency256);
+        int sy = (int) ((y) * frequency256);
         int octave = nbOctave;
         while (octave != 0) {
             int bX = sx & 0xFF;
@@ -45,10 +45,10 @@ public class NoiseGenerator {
             int XYBASE_01 = (XY1376312589_01 << 13) ^ XY1376312589_01;
             int XYBASE_11 = (XY1376312589_11 << 13) ^ XY1376312589_11;
 
-            int alt1 = (XYBASE_00 * (XYBASE_00 * XYBASE_00 * 15731 + 789221) + 1376312589);
-            int alt2 = (XYBASE_10 * (XYBASE_10 * XYBASE_10 * 15731 + 789221) + 1376312589);
-            int alt3 = (XYBASE_01 * (XYBASE_01 * XYBASE_01 * 15731 + 789221) + 1376312589);
-            int alt4 = (XYBASE_11 * (XYBASE_11 * XYBASE_11 * 15731 + 789221) + 1376312589);
+            int alt1 = randomize + (XYBASE_00 * (XYBASE_00 * XYBASE_00 * 15731 + 789221) + 1376312589);
+            int alt2 =  randomize + (XYBASE_10 * (XYBASE_10 * XYBASE_10 * 15731 + 789221) + 1376312589);
+            int alt3 = randomize +  (XYBASE_01 * (XYBASE_01 * XYBASE_01 * 15731 + 789221) + 1376312589);
+            int alt4 = randomize +  (XYBASE_11 * (XYBASE_11 * XYBASE_11 * 15731 + 789221) + 1376312589);
 
          /*
           *NOTE : on  for true grandiant noise uncomment following block
