@@ -1,7 +1,5 @@
 package com.chainsaw.organic.math;
 
-import com.chainsaw.organic.MainScreen;
-
 /**
  * Created by Chainsaw on 24-Nov-14.
  */
@@ -16,6 +14,13 @@ public class NoiseMap {
         values = new int[x * y];
     }
 
+    public NoiseMap(NoiseMap map) {
+        width = map.width;
+        height = map.height;
+        values = new int[width * height];
+        System.arraycopy(map.values, 0, values, 0, map.values.length);
+    }
+
     private int getMax() {
         int max = 0;
         for (int i = 0; i < values.length; i++) {
@@ -26,9 +31,9 @@ public class NoiseMap {
     }
 
     public void normalize(int brightness) {
-        float ratio = (float)getMax() / brightness;
+        float ratio = (float) getMax() / brightness;
         for (int i = 0; i < values.length; i++) {
-            values[i] = (int)(values[i] / ratio);
+            values[i] = (int) (values[i] / ratio);
         }
     }
 
