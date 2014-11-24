@@ -5,4 +5,13 @@
         android:title="@string/action_settings"
         android:orderInCategory="100"
         android:showAsAction="never" />
+    <item android:id="@+id/action_colorpicker"
+        android:title="@string/action_colorpicker"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom" />
+    <item android:id="@+id/action_tilesize"
+        android:title="@string/action_tilesize"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom" />
+
 </menu>

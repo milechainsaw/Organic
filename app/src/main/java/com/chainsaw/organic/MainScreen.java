@@ -8,12 +8,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.chainsaw.organic.math.NoiseGenerator;
+import com.chainsaw.organic.math.NoiseMap;
 
 
 public class MainScreen extends Activity {
+    public static final int BRIGHTNESS = 254;
     ImageView imageView;
+    int screenWidth;
+    int screenHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,37 +37,55 @@ public class MainScreen extends Activity {
 
     private void generateNoise() {
         Log.i("Generator", "Started generation...");
-        int width = imageView.getWidth();
-        int height = imageView.getHeight();
 
-        int x = height;
-        int y = width;
+        screenHeight = imageView.getHeight();
+        screenWidth = imageView.getWidth();
+        int x = 15;
+        int y = 15;
 
-        Bitmap bitmap = Bitmap.createBitmap(x, y, Bitmap.Config.ARGB_8888);
         int randomize = (int) (Math.random() * 789221);
+
+        NoiseMap map = new NoiseMap(x, y);
+        int index = 0;
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
-                int pixel = NoiseGenerator.noise(i / 128f, j / 128f, 7, randomize);
+                map.values[index] = NoiseGenerator.noise(i / 64f, j / 64f, 4, randomize);
+                index++;
+            }
+        }
+        generateBitmap(map);
 
-                int red = pixel;
-                int green = pixel;
-                int blue = pixel;
+
+    }
+
+    private Bitmap generateBitmap(NoiseMap map) {
+        Bitmap bitmap = Bitmap.createBitmap(map.width, map.height, Bitmap.Config.ARGB_8888);
+        int index = 0;
+       map.normalize();
+        for (int i = 0; i < map.width; i++) {
+            for (int j = 0; j < map.height; j++) {
+                int red = map.values[index];
+                int green = map.values[index];
+                int blue = map.values[index];
+                index++;
 
                 red = (red << 16) & 0x00FF0000;
                 green = (green << 8) & 0x0000FF00;
                 blue = blue & 0x000000FF;
 
                 int RGB = 0xFF000000 | red | green | blue;
-
                 bitmap.setPixel(i, j, RGB);
             }
         }
 
-        imageView.setImageBitmap(scaleToFit(bitmap, width, height));
+        imageView.setImageBitmap(scaleToFit(bitmap, screenWidth, screenHeight));
         bitmap.recycle();
-        Log.i("Generator", "Image size " + width + " x " + height);
-        Log.i("Generator", "DONE!!! " + randomize);
+        Log.i("Generator", "DONE!!!");
+
+        return bitmap;
     }
+
+
 
     private Bitmap scaleToFit(Bitmap bitmap, int width, int height) {
         int k;
@@ -92,6 +115,14 @@ public class MainScreen extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            return true;
+        }
+        if (id == R.id.action_colorpicker) {
+            Toast.makeText(this, "COLOR PICKER", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        if (id == R.id.action_tilesize) {
+            Toast.makeText(this, "TILE SIZE", Toast.LENGTH_SHORT).show();
             return true;
         }
         return super.onOptionsItemSelected(item);
