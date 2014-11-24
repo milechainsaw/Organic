@@ -8,23 +8,50 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.chainsaw.organic.math.NoiseGenerator;
 import com.chainsaw.organic.math.NoiseMap;
+import com.chainsaw.organic.widgets.SeekBarHint;
 
 
 public class MainScreen extends Activity {
+
+    private enum SeekBarFunc {
+        BRIGHTNESS, TILESIZE
+    }
+
     public static final int BRIGHTNESS = 254;
+    private boolean seekBarVisible = false;
+    private SeekBarFunc seekBarFunc = SeekBarFunc.BRIGHTNESS;
+    private SeekBarHint seekBar;
     ImageView imageView;
     int screenWidth;
     int screenHeight;
+
+    private NoiseMap map;
+
+    SeekBarHint.OnSeekBarHintProgressChangeListener onSeekChange = new SeekBarHint.OnSeekBarHintProgressChangeListener() {
+        @Override
+        public String onHintTextChanged(SeekBarHint seekBarHint, int progress) {
+            if (seekBarFunc == SeekBarFunc.BRIGHTNESS) {
+                generateBitmap();
+            }
+            if (seekBarFunc == SeekBarFunc.TILESIZE) {
+
+            }
+            return null;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
+
+        seekBar = (SeekBarHint) findViewById(R.id.seekBar);
+        seekBar.setVisibility(View.GONE);
+
         imageView = (ImageView) findViewById(R.id.imgViewDisplay);
         imageView.setClickable(true);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -46,7 +73,7 @@ public class MainScreen extends Activity {
 
         int randomize = (int) (Math.random() * 789221);
 
-        NoiseMap map = new NoiseMap(x, y);
+        map = new NoiseMap(x, y);
         int index = 0;
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
@@ -54,17 +81,18 @@ public class MainScreen extends Activity {
                 index++;
             }
         }
-        generateBitmap(map);
+
+        generateBitmap(BRIGHTNESS);
 
 
     }
 
-    private Bitmap generateBitmap(NoiseMap map) {
+    private Bitmap generateBitmap(int brightness) {
         Bitmap bitmap = Bitmap.createBitmap(map.width, map.height, Bitmap.Config.ARGB_8888);
         int index = 0;
 
 //        Normalize values to the selected brightness
-        map.normalize();
+        map.normalize(brightness);
         for (int i = 0; i < map.width; i++) {
             for (int j = 0; j < map.height; j++) {
                 int red = map.values[index];
@@ -119,12 +147,30 @@ public class MainScreen extends Activity {
         if (id == R.id.action_settings) {
             return true;
         }
+
+        if (id == R.id.action_brightness) {
+            Toast.makeText(this, "BRIGHTNESS", Toast.LENGTH_SHORT).show();
+            if (seekBarVisible) {
+                seekBar.setVisibility(View.GONE);
+            } else {
+                seekBar.setVisibility(View.VISIBLE);
+                seekBarFunc = SeekBarFunc.BRIGHTNESS;
+            }
+            return true;
+        }
+
         if (id == R.id.action_colorpicker) {
             Toast.makeText(this, "COLOR PICKER", Toast.LENGTH_SHORT).show();
             return true;
         }
         if (id == R.id.action_tilesize) {
             Toast.makeText(this, "TILE SIZE", Toast.LENGTH_SHORT).show();
+            if (seekBarVisible) {
+                seekBar.setVisibility(View.GONE);
+            } else {
+                seekBar.setVisibility(View.VISIBLE);
+                seekBarFunc = SeekBarFunc.TILESIZE;
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);

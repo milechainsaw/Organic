@@ -25,8 +25,8 @@ public class NoiseMap {
         return max;
     }
 
-    public void normalize() {
-        float ratio = (float)getMax() / MainScreen.BRIGHTNESS;
+    public void normalize(int brightness) {
+        float ratio = (float)getMax() / brightness;
         for (int i = 0; i < values.length; i++) {
             values[i] = (int)(values[i] / ratio);
         }

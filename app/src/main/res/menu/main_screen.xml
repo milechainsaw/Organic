@@ -13,5 +13,9 @@
         android:title="@string/action_tilesize"
         android:orderInCategory="100"
         android:showAsAction="ifRoom" />
+    <item android:id="@+id/action_brightness"
+        android:title="@string/action_brightness"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom" />
 
 </menu>

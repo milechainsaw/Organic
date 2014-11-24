@@ -6,5 +6,6 @@
     <string name="action_settings">Settings</string>
     <string name="action_colorpicker">Color</string>
     <string name="action_tilesize">Size</string>
+    <string name="action_brightness">Brightness</string>
 
 </resources>
