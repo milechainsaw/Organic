@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.chainsaw.organic.math.NoiseGenerator;
@@ -61,7 +62,9 @@ public class MainScreen extends Activity {
     private Bitmap generateBitmap(NoiseMap map) {
         Bitmap bitmap = Bitmap.createBitmap(map.width, map.height, Bitmap.Config.ARGB_8888);
         int index = 0;
-       map.normalize();
+
+//        Normalize values to the selected brightness
+        map.normalize();
         for (int i = 0; i < map.width; i++) {
             for (int j = 0; j < map.height; j++) {
                 int red = map.values[index];
@@ -84,7 +87,6 @@ public class MainScreen extends Activity {
 
         return bitmap;
     }
-
 
 
     private Bitmap scaleToFit(Bitmap bitmap, int width, int height) {
