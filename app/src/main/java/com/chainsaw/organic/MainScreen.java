@@ -18,14 +18,23 @@ import com.chainsaw.organic.widgets.SeekBarHint;
 
 public class MainScreen extends Activity {
 
+    private boolean allowChange = false;
+
     private enum SeekBarFunc {
         BRIGHTNESS, TILESIZE
     }
 
-    public static final int BRIGHTNESS = 254;
-    private boolean seekBarVisible = false;
-    private SeekBarFunc seekBarFunc = SeekBarFunc.BRIGHTNESS;
-    private SeekBarHint seekBar;
+    public static final float BRIGHTNESS_FACTOR = 0.4f;
+
+    //VALUES
+    private static class MapParams {
+        static int tileSize = 15;
+        static int brightness = 100; // value is between 0-100
+    }
+
+    private SeekBarFunc seekBoxFunc = SeekBarFunc.BRIGHTNESS;
+    private SeekBarHint seekBarWidget;
+    View seekBox;
     ImageView imageView;
     TextView seekText;
     int screenWidth;
@@ -33,31 +42,50 @@ public class MainScreen extends Activity {
 
     private NoiseMap rawMap;
 
+
     SeekBarHint.OnSeekBarHintProgressChangeListener onSeekChange = new SeekBarHint.OnSeekBarHintProgressChangeListener() {
         @Override
         public String onHintTextChanged(SeekBarHint seekBarHint, int progress) {
-            if (seekBarFunc == SeekBarFunc.BRIGHTNESS) {
-                generateBitmap((int)(progress/0.4f));
-                Log.i("SEEK", "Adjusting brightness to " + progress);
-            }
-            if (seekBarFunc == SeekBarFunc.TILESIZE) {
-
+            if (allowChange) {
+                if (seekBoxFunc == SeekBarFunc.BRIGHTNESS) {
+                    MapParams.brightness = progress;
+                    generateBitmap();
+                    Log.i("SEEK", "Adjusting brightness to " + progress);
+                }
+                if (seekBoxFunc == SeekBarFunc.TILESIZE) {
+                    MapParams.tileSize = progress + 2; // offset for 0
+                    generateNoise();
+                    return (MapParams.tileSize + " x " + MapParams.tileSize);
+                }
             }
             return null;
         }
     };
+
+    View.OnClickListener dismissSeekBoxListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            dismissSeekBox();
+        }
+    };
+
+    private void dismissSeekBox() {
+        seekBox.setVisibility(View.GONE);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
 
-        seekBar = (SeekBarHint) findViewById(R.id.seekBar);
-        seekBar.setVisibility(View.GONE);
-        seekBar.setOnProgressChangeListener(onSeekChange);
+        seekBox = findViewById(R.id.seekBox);
+        seekBox.setVisibility(View.GONE);
+
+        seekBarWidget = (SeekBarHint) findViewById(R.id.seekBar);
+        seekBarWidget.setOnProgressChangeListener(onSeekChange);
 
         seekText = (TextView) findViewById(R.id.seekText);
-
+        seekText.setOnClickListener(dismissSeekBoxListener);
 
         imageView = (ImageView) findViewById(R.id.imgViewDisplay);
         imageView.setClickable(true);
@@ -75,8 +103,8 @@ public class MainScreen extends Activity {
 
         screenHeight = imageView.getHeight();
         screenWidth = imageView.getWidth();
-        int x = 15;
-        int y = 15;
+        int x = MapParams.tileSize;
+        int y = x;
 
         int randomize = (int) (Math.random() * 789221);
 
@@ -89,17 +117,17 @@ public class MainScreen extends Activity {
             }
         }
 
-        generateBitmap(BRIGHTNESS);
+        generateBitmap();
 
 
     }
 
-    private Bitmap generateBitmap(int brightness) {
+    private Bitmap generateBitmap() {
         NoiseMap localMap = new NoiseMap(rawMap);
 
         Bitmap bitmap = Bitmap.createBitmap(rawMap.width, rawMap.height, Bitmap.Config.ARGB_8888);
 //        Normalize values to the selected brightness
-        localMap.normalize(brightness);
+        localMap.normalize((int) (MapParams.brightness / BRIGHTNESS_FACTOR));
         int index = 0;
         for (int i = 0; i < localMap.width; i++) {
             for (int j = 0; j < localMap.height; j++) {
@@ -148,25 +176,24 @@ public class MainScreen extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // Disable progress bar updates
+        // until new one settles
+        allowChange = false;
+
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
         }
 
         if (id == R.id.action_brightness) {
-            Toast.makeText(this, "BRIGHTNESS", Toast.LENGTH_SHORT).show();
-            if (seekBarVisible) {
-                seekBarVisible = false;
-                seekBar.setVisibility(View.GONE);
-            } else {
-                seekBarVisible = true;
-                seekBar.setMax(100);
-                seekBar.setVisibility(View.VISIBLE);
-                seekBarFunc = SeekBarFunc.BRIGHTNESS;
-            }
+            seekText.setText("done adjusting BRIGHTNESS");
+            seekBarWidget.setMax(100);
+            seekBarWidget.setProgress(MapParams.brightness);
+
+            seekBox.setVisibility(View.VISIBLE);
+
+            seekBoxFunc = SeekBarFunc.BRIGHTNESS;
+            allowChange = true;
             return true;
         }
 
@@ -175,16 +202,15 @@ public class MainScreen extends Activity {
             return true;
         }
         if (id == R.id.action_tilesize) {
-            Toast.makeText(this, "TILE SIZE", Toast.LENGTH_SHORT).show();
+            seekText.setText("done adjusting COMPLEXITY");
 
-            if (seekBarVisible) {
-                seekBarVisible = false;
-                seekBar.setVisibility(View.GONE);
-            } else {
-                seekBarVisible = true;
-                seekBar.setVisibility(View.VISIBLE);
-                seekBarFunc = SeekBarFunc.TILESIZE;
-            }
+            seekBarWidget.setMax(48);
+            seekBarWidget.setProgress(MapParams.tileSize);
+
+            seekBox.setVisibility(View.VISIBLE);
+
+            seekBoxFunc = SeekBarFunc.TILESIZE;
+            allowChange = true;
             return true;
         }
         return super.onOptionsItemSelected(item);
