@@ -3,6 +3,7 @@ package com.chainsaw.organic.widgets;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -90,13 +91,43 @@ public class SeekBarHint extends SeekBar implements SeekBar.OnSeekBarChangeListe
     }
 
     private void showPopup() {
+        Rect truePosition = locateView(this);
 
         if (mPopupStyle == POPUP_FOLLOW) {
-            mPopup.showAtLocation(this, Gravity.LEFT | Gravity.BOTTOM, (int) (this.getX() + (int) getXPosition(this)), (int) (this.getY() + mYLocationOffset + this.getHeight()));
+            mPopup.showAtLocation(this, Gravity.LEFT | Gravity.BOTTOM, (truePosition.left + (int) getXPosition(this)),(truePosition.bottom + mYLocationOffset + this.getHeight()));
         }
         if (mPopupStyle == POPUP_FIXED) {
-            mPopup.showAtLocation(this, Gravity.CENTER | Gravity.BOTTOM, 0, (int) (this.getY() + mYLocationOffset + this.getHeight()));
+            mPopup.showAtLocation(this, Gravity.CENTER | Gravity.BOTTOM, 0, (truePosition.bottom + mYLocationOffset + this.getHeight()));
         }
+
+//        if (mPopupStyle == POPUP_FOLLOW) {
+//            mPopup.showAtLocation(this, Gravity.LEFT | Gravity.BOTTOM, (int) (this.getX() + (int) getXPosition(this)), (int) (this.getY() + mYLocationOffset + this.getHeight()));
+//        }
+//        if (mPopupStyle == POPUP_FIXED) {
+//            mPopup.showAtLocation(this, Gravity.CENTER | Gravity.BOTTOM, 0, (int) (this.getY() + mYLocationOffset + this.getHeight()));
+//        }
+
+
+    }
+
+    private Rect locateView(View v)
+    {
+        int[] loc_int = new int[2];
+        if (v == null) return null;
+        try
+        {
+            v.getLocationOnScreen(loc_int);
+        } catch (NullPointerException e)
+        {
+            //Happens when the view doesn't exist on screen anymore.
+            return null;
+        }
+        Rect location = new Rect();
+        location.left = loc_int[0];
+        location.top = loc_int[1];
+        location.right = location.left + v.getWidth();
+        location.bottom = location.top + v.getHeight();
+        return location;
     }
 
     private void hidePopup() {
@@ -127,6 +158,8 @@ public class SeekBarHint extends SeekBar implements SeekBar.OnSeekBarChangeListe
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+        Rect truePosition = locateView(this);
+
         String popupText = null;
         if (mProgressChangeListener != null) {
             popupText = mProgressChangeListener.onHintTextChanged(this, getProgress());
@@ -140,7 +173,7 @@ public class SeekBarHint extends SeekBar implements SeekBar.OnSeekBarChangeListe
         mPopupTextView.setText(popupText != null ? popupText : String.valueOf(progress));
 
         if (mPopupStyle == POPUP_FOLLOW) {
-            mPopup.update((int) (this.getX() + (int) getXPosition(seekBar)), (int) (this.getY() + mYLocationOffset + this.getHeight()), -1, -1);
+            mPopup.update((int) (this.getX() + (int) getXPosition(seekBar)), (truePosition.bottom + mYLocationOffset + this.getHeight()), -1, -1);
         }
 
     }

@@ -212,6 +212,7 @@ public class MainScreen extends Activity {
             seekBoxFunc = SeekBarFunc.TILESIZE;
             allowChange = true;
             return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
