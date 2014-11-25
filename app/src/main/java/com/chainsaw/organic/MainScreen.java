@@ -13,7 +13,9 @@ import android.widget.Toast;
 
 import com.chainsaw.organic.math.NoiseGenerator;
 import com.chainsaw.organic.math.NoiseMap;
-import com.chainsaw.organic.widgets.SeekBarHint;
+import com.gc.materialdesign.views.ButtonFloat;
+import com.gc.materialdesign.views.Slider;
+import com.gc.materialdesign.widgets.ColorSelector;
 
 
 public class MainScreen extends Activity {
@@ -28,12 +30,13 @@ public class MainScreen extends Activity {
 
     //VALUES
     private static class MapParams {
+        static int tintColor = 0xFFFFFFFF;
         static int tileSize = 15;
         static int brightness = 100; // value is between 0-100
     }
 
     private SeekBarFunc seekBoxFunc = SeekBarFunc.BRIGHTNESS;
-    private SeekBarHint seekBarWidget;
+    private Slider seekBarWidget;
     View seekBox;
     ImageView imageView;
     TextView seekText;
@@ -42,23 +45,19 @@ public class MainScreen extends Activity {
 
     private NoiseMap rawMap;
 
-
-    SeekBarHint.OnSeekBarHintProgressChangeListener onSeekChange = new SeekBarHint.OnSeekBarHintProgressChangeListener() {
+    Slider.OnValueChangedListener onSeekChange = new Slider.OnValueChangedListener() {
         @Override
-        public String onHintTextChanged(SeekBarHint seekBarHint, int progress) {
+        public void onValueChanged(int value) {
             if (allowChange) {
                 if (seekBoxFunc == SeekBarFunc.BRIGHTNESS) {
-                    MapParams.brightness = progress;
+                    MapParams.brightness = value;
                     generateBitmap();
-                    Log.i("SEEK", "Adjusting brightness to " + progress);
                 }
                 if (seekBoxFunc == SeekBarFunc.TILESIZE) {
-                    MapParams.tileSize = progress + 2; // offset for 0
+                    MapParams.tileSize = value + 2; // offset for 0
                     generateNoise();
-                    return (MapParams.tileSize + " x " + MapParams.tileSize);
                 }
             }
-            return null;
         }
     };
 
@@ -81,8 +80,8 @@ public class MainScreen extends Activity {
         seekBox = findViewById(R.id.seekBox);
         seekBox.setVisibility(View.GONE);
 
-        seekBarWidget = (SeekBarHint) findViewById(R.id.seekBar);
-        seekBarWidget.setOnProgressChangeListener(onSeekChange);
+        seekBarWidget = (Slider) findViewById(R.id.seekBar);
+        seekBarWidget.setOnValueChangedListener(onSeekChange);
 
         seekText = (TextView) findViewById(R.id.seekText);
         seekText.setOnClickListener(dismissSeekBoxListener);
@@ -96,6 +95,28 @@ public class MainScreen extends Activity {
                 generateNoise();
             }
         });
+
+
+        final ButtonFloat buttonFloat = (ButtonFloat) findViewById(R.id.buttonFloat);
+        final ButtonFloat b1 = (ButtonFloat) findViewById(R.id.bt1);
+        final ButtonFloat b2 = (ButtonFloat) findViewById(R.id.bt2);
+
+        buttonFloat.showMe(buttonFloat.getY()+50);
+
+        buttonFloat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(b1.getVisibility() != View.VISIBLE) {
+                    b1.showMe(buttonFloat.getY());
+                    b2.showMe(buttonFloat.getY());
+                } else{
+                    b1.hideMe(buttonFloat.getY());
+                    b2.hideMe(buttonFloat.getY());
+                }
+            }
+        });
+
+
     }
 
     private void generateNoise() {
@@ -140,7 +161,8 @@ public class MainScreen extends Activity {
                 green = (green << 8) & 0x0000FF00;
                 blue = blue & 0x000000FF;
 
-                int RGB = 0xFF000000 | red | green | blue;
+             //   int RGB = 0xFF000000 | red | green | blue;
+                int RGB = MapParams.tintColor ^ ( red | green | blue);
                 bitmap.setPixel(i, j, RGB);
             }
         }
@@ -174,6 +196,18 @@ public class MainScreen extends Activity {
         return true;
     }
 
+    private void pickColor(){
+        ColorSelector colorSelector = new ColorSelector(this, MapParams.tintColor, new ColorSelector.OnColorSelectedListener() {
+            @Override
+            public void onColorSelected(int color) {
+                MapParams.tintColor = 0xFFFFFFFF & color;
+                Toast.makeText(MainScreen.this, String.format("#%06X", (0xFFFFFFFF & color)), Toast.LENGTH_SHORT).show();
+                generateBitmap();
+            }
+        });
+        colorSelector.show();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Disable progress bar updates
@@ -188,7 +222,7 @@ public class MainScreen extends Activity {
         if (id == R.id.action_brightness) {
             seekText.setText("done adjusting BRIGHTNESS");
             seekBarWidget.setMax(100);
-            seekBarWidget.setProgress(MapParams.brightness);
+            seekBarWidget.setValue(MapParams.brightness);
 
             seekBox.setVisibility(View.VISIBLE);
 
@@ -199,13 +233,14 @@ public class MainScreen extends Activity {
 
         if (id == R.id.action_colorpicker) {
             Toast.makeText(this, "COLOR PICKER", Toast.LENGTH_SHORT).show();
+            pickColor();
             return true;
         }
         if (id == R.id.action_tilesize) {
             seekText.setText("done adjusting COMPLEXITY");
 
-            seekBarWidget.setMax(48);
-            seekBarWidget.setProgress(MapParams.tileSize);
+            seekBarWidget.setMax(300);
+            seekBarWidget.setValue(MapParams.tileSize);
 
             seekBox.setVisibility(View.VISIBLE);
 
