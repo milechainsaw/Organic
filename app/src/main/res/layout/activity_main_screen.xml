@@ -42,7 +42,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="viluasdfuvbiad"
             android:paddingTop="16dip"
             android:id="@+id/seekText" />
     </LinearLayout>

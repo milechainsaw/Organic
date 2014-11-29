@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.gc.materialdesign.R;
 import com.gc.materialdesign.utils.Utils;
 import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 
@@ -29,7 +30,7 @@ public class ButtonFloat extends Button {
 
     int sizeIcon = 24;
     int sizeRadius = 28;
-
+    private int ANIMATION_SPEED = 120;
 
     ImageView icon; // Icon of float button
     Drawable drawableIcon;
@@ -117,7 +118,7 @@ public class ButtonFloat extends Button {
                 ViewHelper.setY(ButtonFloat.this, ViewHelper.getY(ButtonFloat.this) + getHeight() * 3);
                 ObjectAnimator animator = ObjectAnimator.ofFloat(ButtonFloat.this, "y", originalY);
                 animator.setInterpolator(new DecelerateInterpolator());
-                animator.setDuration(500);
+                animator.setDuration(ANIMATION_SPEED);
                 animator.start();
             }
         });
@@ -130,10 +131,17 @@ public class ButtonFloat extends Button {
                 float originalY = ViewHelper.getY(ButtonFloat.this);
                 ViewHelper.setY(ButtonFloat.this, startPos);
                 Log.i("SHOW ME ANIMATOR", "Y pos = " + originalY);
-                ObjectAnimator animator = ObjectAnimator.ofFloat(ButtonFloat.this, "y", originalY);
-                animator.setInterpolator(new DecelerateInterpolator());
-                animator.setDuration(500);
-                animator.addListener(new Animator.AnimatorListener() {
+                ObjectAnimator move = ObjectAnimator.ofFloat(ButtonFloat.this, "y", originalY);
+                move.setInterpolator(new DecelerateInterpolator());
+
+                ViewHelper.setAlpha(ButtonFloat.this, 0);
+                ObjectAnimator alpha = ObjectAnimator.ofFloat(ButtonFloat.this, "alpha", 1);
+
+                AnimatorSet set = new AnimatorSet();
+                set.setDuration(ANIMATION_SPEED);
+                set.play(move).with(alpha);
+
+                move.addListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animator) {
                         ButtonFloat.this.setVisibility(View.VISIBLE);
@@ -155,7 +163,8 @@ public class ButtonFloat extends Button {
 
                     }
                 });
-                animator.start();
+
+                set.start();
             }
         });
     }
@@ -168,7 +177,7 @@ public class ButtonFloat extends Button {
                 float finalY = ViewHelper.getY(ButtonFloat.this) + getHeight() * 3;
                 ObjectAnimator animator = ObjectAnimator.ofFloat(ButtonFloat.this, "y", finalY);
                 animator.setInterpolator(new DecelerateInterpolator());
-                animator.setDuration(500);
+                animator.setDuration(ANIMATION_SPEED);
                 animator.addListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animator) {
@@ -202,10 +211,16 @@ public class ButtonFloat extends Button {
             @Override
             public void run() {
                 final float originalY = ViewHelper.getY(ButtonFloat.this);
-                ObjectAnimator animator = ObjectAnimator.ofFloat(ButtonFloat.this, "y", endPos);
-                animator.setInterpolator(new DecelerateInterpolator());
-                animator.setDuration(500);
-                animator.addListener(new Animator.AnimatorListener() {
+                ObjectAnimator move = ObjectAnimator.ofFloat(ButtonFloat.this, "y", endPos);
+                move.setInterpolator(new DecelerateInterpolator());
+
+                ObjectAnimator alpha = ObjectAnimator.ofFloat(ButtonFloat.this, "alpha", 0);
+
+                AnimatorSet set = new AnimatorSet();
+                set.setDuration(ANIMATION_SPEED);
+                set.play(move).with(alpha);
+
+                move.addListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animator) {
 
@@ -228,7 +243,7 @@ public class ButtonFloat extends Button {
 
                     }
                 });
-                animator.start();
+                set.start();
             }
         });
     }
