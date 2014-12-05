@@ -111,7 +111,6 @@ public class MainScreen extends Activity {
         slider1 = (ValueSlider) findViewById(R.id.bt1);
         slider2 = (ValueSlider) findViewById(R.id.bt2);
 
-
         buttonFloat.showMe(buttonFloat.getY() + 50);
 
         buttonFloat.setOnClickListener(new View.OnClickListener() {

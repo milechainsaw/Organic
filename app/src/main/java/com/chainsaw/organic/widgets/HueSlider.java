@@ -25,6 +25,7 @@ public class HueSlider extends ValueSlider {
 
 
     private void initValues() {
+        setShowJustBubbleIndicator(true);
         this.setMax(257);
         int index = 0;
         for (float i = 0; i < 256; i += 256 / 42) // Red (#f00) to pink
