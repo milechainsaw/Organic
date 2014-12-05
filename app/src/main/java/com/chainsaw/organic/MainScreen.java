@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.chainsaw.organic.math.NoiseGenerator;
 import com.chainsaw.organic.math.NoiseMap;
+import com.chainsaw.organic.widgets.MySlider;
 import com.gc.materialdesign.views.ButtonFloat;
 import com.gc.materialdesign.views.Slider;
 import com.gc.materialdesign.widgets.ColorSelector;
@@ -42,6 +43,12 @@ public class MainScreen extends Activity {
     TextView seekText;
     int screenWidth;
     int screenHeight;
+
+    // UI elements
+    ButtonFloat buttonFloat;
+    MySlider slider0;
+    MySlider slider1;
+    MySlider slider2;
 
     private NoiseMap rawMap;
 
@@ -92,30 +99,45 @@ public class MainScreen extends Activity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dismissSliders();
                 generateNoise();
             }
         });
 
 
-        final ButtonFloat buttonFloat = (ButtonFloat) findViewById(R.id.buttonFloat);
-        final ButtonFloat b1 = (ButtonFloat) findViewById(R.id.bt1);
-        final ButtonFloat b2 = (ButtonFloat) findViewById(R.id.bt2);
+        buttonFloat = (ButtonFloat) findViewById(R.id.buttonFloat);
+        slider0 = (MySlider) findViewById(R.id.bt0);
+        slider1 = (MySlider) findViewById(R.id.bt1);
+        slider2 = (MySlider) findViewById(R.id.bt2);
 
-        buttonFloat.showMe(buttonFloat.getY()+50);
+
+        buttonFloat.showMe(buttonFloat.getY() + 50);
 
         buttonFloat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(b1.getVisibility() != View.VISIBLE) {
-                    b1.showMe(buttonFloat.getY());
-                    b2.showMe(buttonFloat.getY());
-                } else{
-                    b1.hideMe(buttonFloat.getY());
-                    b2.hideMe(buttonFloat.getY());
+                if (slider1.getVisibility() != View.VISIBLE) {
+                    buttonFloat.hideMe(buttonFloat.getY());
+                    slider0.showMe(buttonFloat.getY());
+                    slider1.showMe(buttonFloat.getY());
+                    slider2.showMe(buttonFloat.getY());
+                } else {
+//                    buttonFloat.showMe(buttonFloat.getY());
+//                    slider0.hideMe(buttonFloat.getY());
+//                    slider1.hideMe(buttonFloat.getY());
+//                    slider2.hideMe(buttonFloat.getY());
                 }
             }
         });
 
+
+    }
+
+    private void dismissSliders() {
+        buttonFloat.showMe(buttonFloat.getY());
+        slider0.hideMe(buttonFloat.getY());
+        slider1.hideMe(buttonFloat.getY());
+        slider2.hideMe(buttonFloat.getY());
 
     }
 
@@ -161,8 +183,8 @@ public class MainScreen extends Activity {
                 green = (green << 8) & 0x0000FF00;
                 blue = blue & 0x000000FF;
 
-             //   int RGB = 0xFF000000 | red | green | blue;
-                int RGB = MapParams.tintColor ^ ( red | green | blue);
+                //   int RGB = 0xFF000000 | red | green | blue;
+                int RGB = MapParams.tintColor ^ (red | green | blue);
                 bitmap.setPixel(i, j, RGB);
             }
         }
@@ -196,7 +218,7 @@ public class MainScreen extends Activity {
         return true;
     }
 
-    private void pickColor(){
+    private void pickColor() {
         ColorSelector colorSelector = new ColorSelector(this, MapParams.tintColor, new ColorSelector.OnColorSelectedListener() {
             @Override
             public void onColorSelected(int color) {
