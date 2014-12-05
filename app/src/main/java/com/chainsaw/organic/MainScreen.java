@@ -2,11 +2,13 @@ package com.chainsaw.organic;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +52,13 @@ public class MainScreen extends Activity {
     HueSlider slider0;
     ValueSlider slider1;
     ValueSlider slider2;
+
+    //UI help
+    float floatButtonPos;
+    float slider0pos;
+    float slider1pos;
+    float slider2pos;
+    boolean slidersVisible;
 
     private NoiseMap rawMap;
 
@@ -111,8 +120,34 @@ public class MainScreen extends Activity {
         slider1 = (ValueSlider) findViewById(R.id.bt1);
         slider2 = (ValueSlider) findViewById(R.id.bt2);
 
-        dismissSliders();
+        slider0.setVisibility(View.INVISIBLE);
+        slider1.setVisibility(View.INVISIBLE);
+        slider2.setVisibility(View.INVISIBLE);
 
+        slider1.setMax(100);  //Brightness
+        slider2.setMax(300);  //Complexity
+
+
+        slidersVisible = false;
+        buttonFloat.setVisibility(View.VISIBLE);
+
+
+        imageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    buttonFloat.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                } else {
+                    buttonFloat.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+                floatButtonPos = buttonFloat.getY();
+                slider0pos = slider0.getY();
+                slider1pos = slider1.getY();
+                slider2pos = slider2.getY();
+                Toast.makeText(MainScreen.this, "=" + slider1pos, Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
         slider0.setOnValueChangedListener(new Slider.OnValueChangedListener() {
             @Override
@@ -124,19 +159,28 @@ public class MainScreen extends Activity {
             }
         });
 
+        slider1.setOnValueChangedListener(new Slider.OnValueChangedListener() {
+            @Override
+            public void onValueChanged(int value) {
+                MapParams.brightness = value;
+                generateBitmap();
+            }
+        });
+
+        slider2.setOnValueChangedListener(new Slider.OnValueChangedListener() {
+            @Override
+            public void onValueChanged(int value) {
+                MapParams.tileSize = value + 2; // offset for 0
+                generateNoise();
+            }
+        });
+
+
         buttonFloat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (slider1.getVisibility() != View.VISIBLE) {
-                    buttonFloat.hideMe(buttonFloat.getY());
-                    slider0.showMe(buttonFloat.getY());
-                    slider1.showMe(buttonFloat.getY());
-                    slider2.showMe(buttonFloat.getY());
-                } else {
-//                    buttonFloat.showMe(buttonFloat.getY());
-//                    slider0.hideMe(buttonFloat.getY());
-//                    slider1.hideMe(buttonFloat.getY());
-//                    slider2.hideMe(buttonFloat.getY());
+                    showSliders();
                 }
             }
         });
@@ -144,11 +188,35 @@ public class MainScreen extends Activity {
 
     }
 
+    private void showSliders() {
+        if (!slidersVisible) {
+            slider0.setY(slider0pos);
+            slider1.setY(slider1pos);
+            slider2.setY(slider2pos);
+            buttonFloat.setY(floatButtonPos);
+
+            //TODO set hue slider to the right spot
+
+            slider1.setValue(MapParams.brightness);
+            slider2.setValue(MapParams.tileSize);
+
+            buttonFloat.hideMe(floatButtonPos + buttonFloat.getHeight());
+            slider0.showMe(floatButtonPos);
+            slider1.showMe(floatButtonPos);
+            slider2.showMe(floatButtonPos);
+            slidersVisible = true;
+        }
+    }
+
     private void dismissSliders() {
-        buttonFloat.showMe(buttonFloat.getY());
-        slider0.hideMe(buttonFloat.getY());
-        slider1.hideMe(buttonFloat.getY());
-        slider2.hideMe(buttonFloat.getY());
+        if (slidersVisible) {
+            buttonFloat.setY(floatButtonPos);
+            buttonFloat.showMe(floatButtonPos + buttonFloat.getHeight());
+            slider0.hideMe(floatButtonPos);
+            slider1.hideMe(floatButtonPos);
+            slider2.hideMe(floatButtonPos);
+            slidersVisible = false;
+        }
 
     }
 
