@@ -13,7 +13,8 @@ import android.widget.Toast;
 
 import com.chainsaw.organic.math.NoiseGenerator;
 import com.chainsaw.organic.math.NoiseMap;
-import com.chainsaw.organic.widgets.MySlider;
+import com.chainsaw.organic.widgets.HueSlider;
+import com.chainsaw.organic.widgets.ValueSlider;
 import com.gc.materialdesign.views.ButtonFloat;
 import com.gc.materialdesign.views.Slider;
 import com.gc.materialdesign.widgets.ColorSelector;
@@ -46,9 +47,9 @@ public class MainScreen extends Activity {
 
     // UI elements
     ButtonFloat buttonFloat;
-    MySlider slider0;
-    MySlider slider1;
-    MySlider slider2;
+    HueSlider slider0;
+    ValueSlider slider1;
+    ValueSlider slider2;
 
     private NoiseMap rawMap;
 
@@ -106,9 +107,9 @@ public class MainScreen extends Activity {
 
 
         buttonFloat = (ButtonFloat) findViewById(R.id.buttonFloat);
-        slider0 = (MySlider) findViewById(R.id.bt0);
-        slider1 = (MySlider) findViewById(R.id.bt1);
-        slider2 = (MySlider) findViewById(R.id.bt2);
+        slider0 = (HueSlider) findViewById(R.id.bt0);
+        slider1 = (ValueSlider) findViewById(R.id.bt1);
+        slider2 = (ValueSlider) findViewById(R.id.bt2);
 
 
         buttonFloat.showMe(buttonFloat.getY() + 50);

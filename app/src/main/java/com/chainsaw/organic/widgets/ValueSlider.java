@@ -15,10 +15,10 @@ import com.nineoldandroids.view.ViewHelper;
 /**
  * Created by Chainsaw on 29-Nov-14.
  */
-public class MySlider extends Slider {
+public class ValueSlider extends Slider {
 
     int ANIMATION_SPEED = 120;
-    public MySlider(Context context, AttributeSet attrs) {
+    public ValueSlider(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -26,11 +26,11 @@ public class MySlider extends Slider {
         post(new Runnable() {
             @Override
             public void run() {
-                final float originalY = ViewHelper.getY(MySlider.this);
-                ObjectAnimator move = ObjectAnimator.ofFloat(MySlider.this, "y", endPos);
+                final float originalY = ViewHelper.getY(ValueSlider.this);
+                ObjectAnimator move = ObjectAnimator.ofFloat(ValueSlider.this, "y", endPos);
                 move.setInterpolator(new DecelerateInterpolator());
 
-                ObjectAnimator alpha = ObjectAnimator.ofFloat(MySlider.this, "alpha", 0);
+                ObjectAnimator alpha = ObjectAnimator.ofFloat(ValueSlider.this, "alpha", 0);
 
                 AnimatorSet set = new AnimatorSet();
                 set.setDuration(ANIMATION_SPEED);
@@ -44,8 +44,8 @@ public class MySlider extends Slider {
 
                     @Override
                     public void onAnimationEnd(Animator animator) {
-                        MySlider.this.setVisibility(View.INVISIBLE);
-                        ViewHelper.setY(MySlider.this, originalY);
+                        ValueSlider.this.setVisibility(View.INVISIBLE);
+                        ViewHelper.setY(ValueSlider.this, originalY);
                         animator.removeAllListeners();
                     }
 
@@ -69,14 +69,14 @@ public class MySlider extends Slider {
         post(new Runnable() {
             @Override
             public void run() {
-                float originalY = ViewHelper.getY(MySlider.this);
-                ViewHelper.setY(MySlider.this, startPos);
+                float originalY = ViewHelper.getY(ValueSlider.this);
+                ViewHelper.setY(ValueSlider.this, startPos);
                 Log.i("SHOW ME ANIMATOR", "Y pos = " + originalY);
-                ObjectAnimator move = ObjectAnimator.ofFloat(MySlider.this, "y", originalY);
+                ObjectAnimator move = ObjectAnimator.ofFloat(ValueSlider.this, "y", originalY);
                 move.setInterpolator(new DecelerateInterpolator());
 
-                ViewHelper.setAlpha(MySlider.this, 0);
-                ObjectAnimator alpha = ObjectAnimator.ofFloat(MySlider.this, "alpha", 1);
+                ViewHelper.setAlpha(ValueSlider.this, 0);
+                ObjectAnimator alpha = ObjectAnimator.ofFloat(ValueSlider.this, "alpha", 1);
 
                 AnimatorSet set = new AnimatorSet();
                 set.setDuration(ANIMATION_SPEED);
@@ -85,7 +85,7 @@ public class MySlider extends Slider {
                 move.addListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animator) {
-                        MySlider.this.setVisibility(View.VISIBLE);
+                        ValueSlider.this.setVisibility(View.VISIBLE);
                         animator.removeAllListeners();
                     }
 
