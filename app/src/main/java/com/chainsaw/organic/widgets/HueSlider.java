@@ -23,6 +23,10 @@ public class HueSlider extends ValueSlider {
         this.setOnValueChangedListener(mValueListener);
     }
 
+    public int getColor(){
+        return mColorList[getValue()];
+    }
+
 
     private void initValues() {
         setShowJustBubbleIndicator(true);
