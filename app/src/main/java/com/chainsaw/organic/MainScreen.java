@@ -117,8 +117,8 @@ public class MainScreen extends Activity {
         slider0.setOnValueChangedListener(new Slider.OnValueChangedListener() {
             @Override
             public void onValueChanged(int value) {
-                MapParams.tintColor = 0xFFFFFFFF & slider0.getColor();;
-                //Toast.makeText(MainScreen.this, String.format("#%06X", (0xFFFFFFFF & color)), Toast.LENGTH_SHORT).show();
+                MapParams.tintColor = 0xFFFFFFFF & slider0.getColor(value);
+                slider0.setBackgroundColor(slider0.getColor(value));
                 generateBitmap();
 
             }

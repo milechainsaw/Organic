@@ -16,8 +16,8 @@ public class HueSlider extends ValueSlider {
         initValues();
     }
 
-    public int getColor(){
-        return mColorList[getValue()];
+    public int getColor(int index){
+        return mColorList[index];
     }
 
 
