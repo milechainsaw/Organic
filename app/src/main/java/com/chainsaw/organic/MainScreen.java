@@ -111,7 +111,18 @@ public class MainScreen extends Activity {
         slider1 = (ValueSlider) findViewById(R.id.bt1);
         slider2 = (ValueSlider) findViewById(R.id.bt2);
 
-        buttonFloat.showMe(buttonFloat.getY() + 50);
+        dismissSliders();
+
+
+        slider0.setOnValueChangedListener(new Slider.OnValueChangedListener() {
+            @Override
+            public void onValueChanged(int value) {
+                MapParams.tintColor = 0xFFFFFFFF & slider0.getColor();;
+                //Toast.makeText(MainScreen.this, String.format("#%06X", (0xFFFFFFFF & color)), Toast.LENGTH_SHORT).show();
+                generateBitmap();
+
+            }
+        });
 
         buttonFloat.setOnClickListener(new View.OnClickListener() {
             @Override

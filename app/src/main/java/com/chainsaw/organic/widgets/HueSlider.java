@@ -10,17 +10,10 @@ import android.util.AttributeSet;
 public class HueSlider extends ValueSlider {
 
     private int[] mColorList = new int[258];
-    private OnValueChangedListener mValueListener = new OnValueChangedListener() {
-        @Override
-        public void onValueChanged(int value) {
-            HueSlider.this.setBackgroundColor(mColorList[value]);
-        }
-    };
 
     public HueSlider(Context context, AttributeSet attrs) {
         super(context, attrs);
         initValues();
-        this.setOnValueChangedListener(mValueListener);
     }
 
     public int getColor(){
