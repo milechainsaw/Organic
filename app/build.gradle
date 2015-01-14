@@ -1,5 +1,14 @@
 apply plugin: 'com.android.application'
 
+apply plugin: 'idea'
+idea {
+
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
 android {
     compileSdkVersion 19
     buildToolsVersion "19.1.0"
@@ -13,7 +22,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -21,5 +30,6 @@ android {
 
 dependencies {
     compile project(':library:materialDesign')
+    compile 'com.github.traex.rippleeffect:library:1.2.4'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
