@@ -14,8 +14,7 @@ public final class R {
         public static int snackbar_show_animation=0x7f040002;
     }
     public static final class attr {
-        /**  in float button indicate if must start with animation 
-         <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+        /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
 theme attribute (in the form
@@ -23,8 +22,7 @@ theme attribute (in the form
 containing a value of this type.
          */
         public static int animate=0x7f010007;
-        /**  in switche's view indicate state of view 
-         <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+        /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
 theme attribute (in the form
@@ -32,8 +30,7 @@ theme attribute (in the form
 containing a value of this type.
          */
         public static int check=0x7f010005;
-        /**  in float button indicate icon resource 
-         <p>Must be an integer value, such as "<code>100</code>".
+        /** <p>Must be an integer value, such as "<code>100</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
 theme attribute (in the form
@@ -41,8 +38,7 @@ theme attribute (in the form
 containing a value of this type.
          */
         public static int iconFloat=0x7f010006;
-        /**  in progress view indicate max value of progress 
-         <p>Must be an integer value, such as "<code>100</code>".
+        /** <p>Must be an integer value, such as "<code>100</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
 theme attribute (in the form
@@ -50,8 +46,7 @@ theme attribute (in the form
 containing a value of this type.
          */
         public static int max=0x7f010001;
-        /**  in progress view indicate min value of progress 
-         <p>Must be an integer value, such as "<code>100</code>".
+        /** <p>Must be an integer value, such as "<code>100</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
 theme attribute (in the form
@@ -59,8 +54,7 @@ theme attribute (in the form
 containing a value of this type.
          */
         public static int min=0x7f010002;
-        /**  in progress view indicate value of progress 
-         <p>Must be an integer value, such as "<code>100</code>".
+        /** <p>Must be an integer value, such as "<code>100</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
 theme attribute (in the form
@@ -68,15 +62,13 @@ theme attribute (in the form
 containing a value of this type.
          */
         public static int progress=0x7f010004;
-        /**  in float button indicate if must start with animation 
-         <p>May be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+        /** <p>May be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
 <p>May be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
 "<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
          */
         public static int rippleColor=0x7f010009;
-        /**  Speed of ripple animation 
-         <p>Must be a floating point value, such as "<code>1.2</code>".
+        /** <p>Must be a floating point value, such as "<code>1.2</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
 theme attribute (in the form
@@ -84,8 +76,7 @@ theme attribute (in the form
 containing a value of this type.
          */
         public static int rippleSpeed=0x7f010008;
-        /**  indicate if the slider must show number indicator 
-         <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+        /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
 theme attribute (in the form
@@ -93,8 +84,7 @@ theme attribute (in the form
 containing a value of this type.
          */
         public static int showNumberIndicator=0x7f010000;
-        /**  in progress view indicate value of progress 
-         <p>Must be an integer value, such as "<code>100</code>".
+        /** <p>Must be an integer value, such as "<code>100</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
 theme attribute (in the form
@@ -158,16 +148,16 @@ containing a value of this type.
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #CustomAttributes_animate com.gc.materialdesign:animate}</code></td><td> in float button indicate if must start with animation </td></tr>
-           <tr><td><code>{@link #CustomAttributes_check com.gc.materialdesign:check}</code></td><td> in switche's view indicate state of view </td></tr>
-           <tr><td><code>{@link #CustomAttributes_iconFloat com.gc.materialdesign:iconFloat}</code></td><td> in float button indicate icon resource </td></tr>
-           <tr><td><code>{@link #CustomAttributes_max com.gc.materialdesign:max}</code></td><td> in progress view indicate max value of progress </td></tr>
-           <tr><td><code>{@link #CustomAttributes_min com.gc.materialdesign:min}</code></td><td> in progress view indicate min value of progress </td></tr>
-           <tr><td><code>{@link #CustomAttributes_progress com.gc.materialdesign:progress}</code></td><td> in progress view indicate value of progress </td></tr>
-           <tr><td><code>{@link #CustomAttributes_rippleColor com.gc.materialdesign:rippleColor}</code></td><td> in float button indicate if must start with animation </td></tr>
-           <tr><td><code>{@link #CustomAttributes_rippleSpeed com.gc.materialdesign:rippleSpeed}</code></td><td> Speed of ripple animation </td></tr>
-           <tr><td><code>{@link #CustomAttributes_showNumberIndicator com.gc.materialdesign:showNumberIndicator}</code></td><td> indicate if the slider must show number indicator </td></tr>
-           <tr><td><code>{@link #CustomAttributes_value com.gc.materialdesign:value}</code></td><td> in progress view indicate value of progress </td></tr>
+           <tr><td><code>{@link #CustomAttributes_animate com.gc.materialdesign:animate}</code></td><td></td></tr>
+           <tr><td><code>{@link #CustomAttributes_check com.gc.materialdesign:check}</code></td><td></td></tr>
+           <tr><td><code>{@link #CustomAttributes_iconFloat com.gc.materialdesign:iconFloat}</code></td><td></td></tr>
+           <tr><td><code>{@link #CustomAttributes_max com.gc.materialdesign:max}</code></td><td></td></tr>
+           <tr><td><code>{@link #CustomAttributes_min com.gc.materialdesign:min}</code></td><td></td></tr>
+           <tr><td><code>{@link #CustomAttributes_progress com.gc.materialdesign:progress}</code></td><td></td></tr>
+           <tr><td><code>{@link #CustomAttributes_rippleColor com.gc.materialdesign:rippleColor}</code></td><td></td></tr>
+           <tr><td><code>{@link #CustomAttributes_rippleSpeed com.gc.materialdesign:rippleSpeed}</code></td><td></td></tr>
+           <tr><td><code>{@link #CustomAttributes_showNumberIndicator com.gc.materialdesign:showNumberIndicator}</code></td><td></td></tr>
+           <tr><td><code>{@link #CustomAttributes_value com.gc.materialdesign:value}</code></td><td></td></tr>
            </table>
            @see #CustomAttributes_animate
            @see #CustomAttributes_check
@@ -186,9 +176,8 @@ containing a value of this type.
             0x7f010008, 0x7f010009
         };
         /**
-          <p>
-          @attr description
-           in float button indicate if must start with animation 
+          <p>This symbol is the offset where the {@link com.gc.materialdesign.R.attr#animate}
+          attribute's value can be found in the {@link #CustomAttributes} array.
 
 
           <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
@@ -197,14 +186,12 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          <p>This is a private symbol.
           @attr name com.gc.materialdesign:animate
         */
         public static final int CustomAttributes_animate = 7;
         /**
-          <p>
-          @attr description
-           in switche's view indicate state of view 
+          <p>This symbol is the offset where the {@link com.gc.materialdesign.R.attr#check}
+          attribute's value can be found in the {@link #CustomAttributes} array.
 
 
           <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
@@ -213,14 +200,12 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          <p>This is a private symbol.
           @attr name com.gc.materialdesign:check
         */
         public static final int CustomAttributes_check = 5;
         /**
-          <p>
-          @attr description
-           in float button indicate icon resource 
+          <p>This symbol is the offset where the {@link com.gc.materialdesign.R.attr#iconFloat}
+          attribute's value can be found in the {@link #CustomAttributes} array.
 
 
           <p>Must be an integer value, such as "<code>100</code>".
@@ -229,14 +214,12 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          <p>This is a private symbol.
           @attr name com.gc.materialdesign:iconFloat
         */
         public static final int CustomAttributes_iconFloat = 6;
         /**
-          <p>
-          @attr description
-           in progress view indicate max value of progress 
+          <p>This symbol is the offset where the {@link com.gc.materialdesign.R.attr#max}
+          attribute's value can be found in the {@link #CustomAttributes} array.
 
 
           <p>Must be an integer value, such as "<code>100</code>".
@@ -245,14 +228,12 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          <p>This is a private symbol.
           @attr name com.gc.materialdesign:max
         */
         public static final int CustomAttributes_max = 1;
         /**
-          <p>
-          @attr description
-           in progress view indicate min value of progress 
+          <p>This symbol is the offset where the {@link com.gc.materialdesign.R.attr#min}
+          attribute's value can be found in the {@link #CustomAttributes} array.
 
 
           <p>Must be an integer value, such as "<code>100</code>".
@@ -261,14 +242,12 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          <p>This is a private symbol.
           @attr name com.gc.materialdesign:min
         */
         public static final int CustomAttributes_min = 2;
         /**
-          <p>
-          @attr description
-           in progress view indicate value of progress 
+          <p>This symbol is the offset where the {@link com.gc.materialdesign.R.attr#progress}
+          attribute's value can be found in the {@link #CustomAttributes} array.
 
 
           <p>Must be an integer value, such as "<code>100</code>".
@@ -277,28 +256,24 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          <p>This is a private symbol.
           @attr name com.gc.materialdesign:progress
         */
         public static final int CustomAttributes_progress = 4;
         /**
-          <p>
-          @attr description
-           in float button indicate if must start with animation 
+          <p>This symbol is the offset where the {@link com.gc.materialdesign.R.attr#rippleColor}
+          attribute's value can be found in the {@link #CustomAttributes} array.
 
 
           <p>May be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
 <p>May be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
 "<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
-          <p>This is a private symbol.
           @attr name com.gc.materialdesign:rippleColor
         */
         public static final int CustomAttributes_rippleColor = 9;
         /**
-          <p>
-          @attr description
-           Speed of ripple animation 
+          <p>This symbol is the offset where the {@link com.gc.materialdesign.R.attr#rippleSpeed}
+          attribute's value can be found in the {@link #CustomAttributes} array.
 
 
           <p>Must be a floating point value, such as "<code>1.2</code>".
@@ -307,14 +282,12 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          <p>This is a private symbol.
           @attr name com.gc.materialdesign:rippleSpeed
         */
         public static final int CustomAttributes_rippleSpeed = 8;
         /**
-          <p>
-          @attr description
-           indicate if the slider must show number indicator 
+          <p>This symbol is the offset where the {@link com.gc.materialdesign.R.attr#showNumberIndicator}
+          attribute's value can be found in the {@link #CustomAttributes} array.
 
 
           <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
@@ -323,14 +296,12 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          <p>This is a private symbol.
           @attr name com.gc.materialdesign:showNumberIndicator
         */
         public static final int CustomAttributes_showNumberIndicator = 0;
         /**
-          <p>
-          @attr description
-           in progress view indicate value of progress 
+          <p>This symbol is the offset where the {@link com.gc.materialdesign.R.attr#value}
+          attribute's value can be found in the {@link #CustomAttributes} array.
 
 
           <p>Must be an integer value, such as "<code>100</code>".
@@ -339,7 +310,6 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          <p>This is a private symbol.
           @attr name com.gc.materialdesign:value
         */
         public static final int CustomAttributes_value = 3;
