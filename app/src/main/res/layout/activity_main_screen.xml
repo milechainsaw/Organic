@@ -24,7 +24,7 @@
     </com.andexert.library.RippleView>
 
     <com.gc.materialdesign.views.ButtonFloat
-        android:id="@+id/buttonFloat"
+        android:id="@+id/buttonSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -34,6 +34,19 @@
         android:background="#1E88E5"
         materialdesign:animate="true"
         materialdesign:iconFloat="@drawable/ic_action_settings"/>
+
+    <com.gc.materialdesign.views.ButtonFloat
+        android:id="@+id/buttonApply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/buttonSettings"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="24dp"
+        android:layout_marginRight="24dp"
+        android:background="#1E88E5"
+        materialdesign:animate="true"
+        materialdesign:iconFloat="@drawable/ic_action_settings"/>
+
 
     <com.chainsaw.organic.widgets.HueSlider
         android:id="@+id/bt0"
@@ -50,7 +63,7 @@
         android:id="@+id/bt1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/buttonFloat"
+        android:layout_above="@id/buttonSettings"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="24dp"
         android:layout_marginLeft="24dp"

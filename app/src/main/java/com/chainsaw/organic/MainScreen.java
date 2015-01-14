@@ -1,10 +1,15 @@
 package com.chainsaw.organic;
 
 import android.app.Activity;
+import android.content.ContentValues;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -36,13 +41,15 @@ public class MainScreen extends Activity {
     int screenHeight;
 
     // UI elements
-    ButtonFloat buttonFloat;
+    ButtonFloat buttonSettings;
+    ButtonFloat buttonApply;
     HueSlider slider0;
     ValueSlider slider1;
     ValueSlider slider2;
 
     //UI help
-    float floatButtonPos;
+    float settingsButtonPos;
+    float applyButtonPos;
     float slider0pos;
     float slider1pos;
     float slider2pos;
@@ -71,7 +78,8 @@ public class MainScreen extends Activity {
         });
 
 
-        buttonFloat = (ButtonFloat) findViewById(R.id.buttonFloat);
+        buttonSettings = (ButtonFloat) findViewById(R.id.buttonSettings);
+        buttonApply = (ButtonFloat) findViewById(R.id.buttonApply);
         slider0 = (HueSlider) findViewById(R.id.bt0);
         slider1 = (ValueSlider) findViewById(R.id.bt1);
         slider2 = (ValueSlider) findViewById(R.id.bt2);
@@ -85,17 +93,20 @@ public class MainScreen extends Activity {
 
 
         slidersVisible = false;
-        buttonFloat.setVisibility(View.VISIBLE);
+        buttonSettings.setVisibility(View.VISIBLE);
+        buttonApply.setVisibility(View.VISIBLE);
 
         imageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    buttonFloat.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    buttonSettings.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 } else {
-                    buttonFloat.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    buttonSettings.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 }
-                floatButtonPos = buttonFloat.getY();
+                settingsButtonPos = buttonSettings.getY();
+                applyButtonPos = buttonApply.getY();
+
                 slider0pos = slider0.getY();
                 slider1pos = slider1.getY();
                 slider2pos = slider2.getY();
@@ -131,7 +142,7 @@ public class MainScreen extends Activity {
         });
 
 
-        buttonFloat.setOnClickListener(new View.OnClickListener() {
+        buttonSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (slider1.getVisibility() != View.VISIBLE) {
@@ -140,7 +151,34 @@ public class MainScreen extends Activity {
             }
         });
 
+        buttonApply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveImageToGallery();
 
+                Toast.makeText(MainScreen.this, "saved!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    private void saveImageToGallery() {
+        if (imageView.getDrawable() != null) {
+            Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        }
+
+
+    }
+
+    public static Uri addImageToGallery(Context context, String filepath, String title, String description) {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, title);
+        values.put(MediaStore.Images.Media.DESCRIPTION, description);
+        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+        values.put(MediaStore.MediaColumns.DATA, filepath);
+
+        return context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
     }
 
     private void getDisplayMetrics() {
@@ -156,28 +194,33 @@ public class MainScreen extends Activity {
             slider0.setY(slider0pos);
             slider1.setY(slider1pos);
             slider2.setY(slider2pos);
-            buttonFloat.setY(floatButtonPos);
+            buttonSettings.setY(settingsButtonPos);
+            buttonApply.setY(applyButtonPos);
 
             //TODO set hue slider to the right spot
 
             slider1.setValue(MapParams.brightness);
             slider2.setValue(MapParams.tileSize);
 
-            buttonFloat.hideMe(floatButtonPos + buttonFloat.getHeight());
-            slider0.showMe(floatButtonPos);
-            slider1.showMe(floatButtonPos);
-            slider2.showMe(floatButtonPos);
+            buttonSettings.hideMe(settingsButtonPos + buttonSettings.getHeight());
+            buttonApply.hideMe(applyButtonPos + buttonApply.getHeight());
+            slider0.showMe(settingsButtonPos);
+            slider1.showMe(settingsButtonPos);
+            slider2.showMe(settingsButtonPos);
             slidersVisible = true;
         }
     }
 
     private void dismissSliders() {
         if (slidersVisible) {
-            buttonFloat.setY(floatButtonPos);
-            buttonFloat.showMe(floatButtonPos + buttonFloat.getHeight());
-            slider0.hideMe(floatButtonPos);
-            slider1.hideMe(floatButtonPos);
-            slider2.hideMe(floatButtonPos);
+            buttonSettings.setY(settingsButtonPos);
+            buttonSettings.showMe(settingsButtonPos + buttonSettings.getHeight());
+
+            buttonApply.setY(applyButtonPos);
+            buttonApply.showMe(applyButtonPos + buttonApply.getHeight());
+            slider0.hideMe(settingsButtonPos);
+            slider1.hideMe(settingsButtonPos);
+            slider2.hideMe(settingsButtonPos);
             slidersVisible = false;
         }
 
