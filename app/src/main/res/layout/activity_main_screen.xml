@@ -45,7 +45,7 @@
         android:layout_marginRight="24dp"
         android:background="#1E88E5"
         materialdesign:animate="true"
-        materialdesign:iconFloat="@drawable/ic_action_settings"/>
+        materialdesign:iconFloat="@drawable/ic_action_accept"/>
 
 
     <com.chainsaw.organic.widgets.HueSlider

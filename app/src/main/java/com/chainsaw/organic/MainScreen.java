@@ -167,16 +167,15 @@ public class MainScreen extends Activity {
 
     private void saveImageToGallery() {
         if (imageView.getDrawable() != null) {
-            Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-//            String path = SavePhotoUtils.insertImage(this.getContentResolver(), bitmap, "Background_1", "Wow that's cool!");
+            Bitmap wall_bitmap = Bitmap.createBitmap(((BitmapDrawable) imageView.getDrawable()).getBitmap());
             try {
-                WallpaperManager.getInstance(this).setBitmap(bitmap);
+                WallpaperManager.getInstance(this).setBitmap(wall_bitmap);
             } catch (IOException e) {
                 Toast.makeText(MainScreen.this, "Fucked! ", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
             Toast.makeText(MainScreen.this, "saved! ", Toast.LENGTH_SHORT).show();
-            bitmap.recycle();
+            wall_bitmap.recycle();
         }
     }
 
