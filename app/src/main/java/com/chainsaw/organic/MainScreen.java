@@ -1,6 +1,7 @@
 package com.chainsaw.organic;
 
 import android.app.Activity;
+import android.app.WallpaperManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -19,10 +20,13 @@ import android.widget.Toast;
 
 import com.chainsaw.organic.math.NoiseGenerator;
 import com.chainsaw.organic.math.NoiseMap;
+import com.chainsaw.organic.utils.SavePhotoUtils;
 import com.chainsaw.organic.widgets.HueSlider;
 import com.chainsaw.organic.widgets.ValueSlider;
 import com.gc.materialdesign.views.ButtonFloat;
 import com.gc.materialdesign.views.Slider;
+
+import java.io.IOException;
 
 
 public class MainScreen extends Activity {
@@ -156,7 +160,6 @@ public class MainScreen extends Activity {
             public void onClick(View view) {
                 saveImageToGallery();
 
-                Toast.makeText(MainScreen.this, "saved!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -165,21 +168,18 @@ public class MainScreen extends Activity {
     private void saveImageToGallery() {
         if (imageView.getDrawable() != null) {
             Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+//            String path = SavePhotoUtils.insertImage(this.getContentResolver(), bitmap, "Background_1", "Wow that's cool!");
+            try {
+                WallpaperManager.getInstance(this).setBitmap(bitmap);
+            } catch (IOException e) {
+                Toast.makeText(MainScreen.this, "Fucked! ", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+            Toast.makeText(MainScreen.this, "saved! ", Toast.LENGTH_SHORT).show();
+            bitmap.recycle();
         }
-
-
     }
 
-    public static Uri addImageToGallery(Context context, String filepath, String title, String description) {
-        ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.TITLE, title);
-        values.put(MediaStore.Images.Media.DESCRIPTION, description);
-        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
-        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-        values.put(MediaStore.MediaColumns.DATA, filepath);
-
-        return context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-    }
 
     private void getDisplayMetrics() {
         Display display = getWindowManager().getDefaultDisplay();
@@ -248,7 +248,7 @@ public class MainScreen extends Activity {
 
     }
 
-    private Bitmap generateBitmap() {
+    private void generateBitmap() {
         NoiseMap localMap = new NoiseMap(rawMap);
 
         Bitmap bitmap = Bitmap.createBitmap(rawMap.width, rawMap.height, Bitmap.Config.ARGB_8888);
@@ -276,7 +276,6 @@ public class MainScreen extends Activity {
         bitmap.recycle();
         Log.i("Generator", "DONE!!!");
 
-        return bitmap;
     }
 
 
