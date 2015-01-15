@@ -352,7 +352,7 @@ public class MainScreen extends Activity {
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
             shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
-            shareIntent.putExtra(Intent.EXTRA_TEXT, "Wallpaper created with OrganicPixel Wallpaper generator");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "Created with OrganicPixel. Check it out! http://milenkojovanovic.com/OrganicPixelApp");
             shareIntent.setType("image/*");
             // Launch sharing dialog for image
             startActivity(Intent.createChooser(shareIntent, "Share Image"));
