@@ -1,8 +1,5 @@
 package com.gc.materialdesign.widgets;
 
-import com.gc.materialdesign.R;
-import com.gc.materialdesign.views.ButtonFlat;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.Color;
@@ -16,6 +13,9 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+
+import com.gc.materialdesign.R;
+import com.gc.materialdesign.views.ButtonFlat;
 
 public class SnackBar extends Dialog{
 	

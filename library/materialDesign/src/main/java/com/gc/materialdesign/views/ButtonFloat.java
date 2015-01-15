@@ -10,7 +10,6 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
@@ -130,7 +129,6 @@ public class ButtonFloat extends Button {
             public void run() {
                 float originalY = ViewHelper.getY(ButtonFloat.this);
                 ViewHelper.setY(ButtonFloat.this, startPos);
-                Log.i("SHOW ME ANIMATOR", "Y pos = " + originalY);
                 ObjectAnimator move = ObjectAnimator.ofFloat(ButtonFloat.this, "y", originalY);
                 move.setInterpolator(new DecelerateInterpolator());
 

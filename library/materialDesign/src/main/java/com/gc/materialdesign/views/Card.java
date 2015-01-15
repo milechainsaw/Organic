@@ -1,13 +1,13 @@
 package com.gc.materialdesign.views;
 
-import com.gc.materialdesign.R;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.util.AttributeSet;
 import android.widget.TextView;
+
+import com.gc.materialdesign.R;
 
 public class Card extends CustomView {
 	

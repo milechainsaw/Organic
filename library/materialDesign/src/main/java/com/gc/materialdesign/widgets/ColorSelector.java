@@ -1,9 +1,5 @@
 package com.gc.materialdesign.widgets;
 
-import com.gc.materialdesign.R;
-import com.gc.materialdesign.views.Slider;
-import com.gc.materialdesign.views.Slider.OnValueChangedListener;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -12,6 +8,10 @@ import android.view.View;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+
+import com.gc.materialdesign.R;
+import com.gc.materialdesign.views.Slider;
+import com.gc.materialdesign.views.Slider.OnValueChangedListener;
 
 public class ColorSelector extends android.app.Dialog implements OnValueChangedListener{
 	

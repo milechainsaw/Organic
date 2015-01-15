@@ -2,7 +2,6 @@ package com.chainsaw.organic.widgets;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
@@ -71,7 +70,6 @@ public class ValueSlider extends Slider {
             public void run() {
                 float originalY = ViewHelper.getY(ValueSlider.this);
                 ViewHelper.setY(ValueSlider.this, startPos);
-                Log.i("SHOW ME ANIMATOR", "Y pos = " + originalY);
                 ObjectAnimator move = ObjectAnimator.ofFloat(ValueSlider.this, "y", originalY);
                 move.setInterpolator(new DecelerateInterpolator());
 
