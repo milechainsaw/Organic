@@ -53,6 +53,19 @@
         materialdesign:animate="true"
         materialdesign:iconFloat="@drawable/ic_action_accept" />
 
+    <com.gc.materialdesign.views.ButtonFloat
+        android:id="@+id/buttonShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/buttonApply"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginEnd="24dp"
+        android:background="#1E88E5"
+        materialdesign:animate="true"
+        materialdesign:iconFloat="@drawable/ic_action_share" />
 
     <com.chainsaw.organic.widgets.HueSlider
         android:id="@+id/bt0"

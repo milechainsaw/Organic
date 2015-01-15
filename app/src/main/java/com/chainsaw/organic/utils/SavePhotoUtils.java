@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.net.Uri;
@@ -14,6 +15,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 /**
  * Android internals have been modified to store images in the media folder with

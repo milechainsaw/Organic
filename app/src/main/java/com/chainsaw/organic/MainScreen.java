@@ -2,12 +2,16 @@ package com.chainsaw.organic;
 
 import android.app.Activity;
 import android.app.WallpaperManager;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -22,6 +26,8 @@ import com.chainsaw.organic.widgets.ValueSlider;
 import com.gc.materialdesign.views.ButtonFloat;
 import com.gc.materialdesign.views.Slider;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 
@@ -49,6 +55,7 @@ public class MainScreen extends Activity {
     // UI elements
     ButtonFloat buttonSettings;
     ButtonFloat buttonApply;
+    ButtonFloat buttonShare;
     HueSlider sliderHue;
     ValueSlider sliderBrihtness;
     ValueSlider sliderTileSize;
@@ -56,8 +63,9 @@ public class MainScreen extends Activity {
 
 
     //UI help
-    float settingsButtonPos;
-    float applyButtonPos;
+    float buttonSettingsPos;
+    float buttonApplyPos;
+    float buttonSharePos;
     float sliderHuePos;
     float sliderBrightnessPos;
     float sliderTileSizePos;
@@ -92,6 +100,7 @@ public class MainScreen extends Activity {
 
         buttonSettings = (ButtonFloat) findViewById(R.id.buttonSettings);
         buttonApply = (ButtonFloat) findViewById(R.id.buttonApply);
+        buttonShare = (ButtonFloat) findViewById(R.id.buttonShare);
         sliderHue = (HueSlider) findViewById(R.id.bt0);
         sliderBrihtness = (ValueSlider) findViewById(R.id.bt1);
         sliderTileSize = (ValueSlider) findViewById(R.id.bt3);
@@ -115,6 +124,7 @@ public class MainScreen extends Activity {
         slidersVisible = false;
         buttonSettings.setVisibility(View.VISIBLE);
         buttonApply.setVisibility(View.VISIBLE);
+        buttonShare.setVisibility(View.VISIBLE);
 
         imageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -124,8 +134,9 @@ public class MainScreen extends Activity {
                 } else {
                     buttonSettings.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 }
-                settingsButtonPos = buttonSettings.getY();
-                applyButtonPos = buttonApply.getY();
+                buttonSettingsPos = buttonSettings.getY();
+                buttonApplyPos = buttonApply.getY();
+                buttonSharePos = buttonShare.getY();
 
                 sliderHuePos = sliderHue.getY();
                 sliderBrightnessPos = sliderBrihtness.getY();
@@ -186,6 +197,15 @@ public class MainScreen extends Activity {
             }
         });
 
+        buttonShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO SHARE ACTION
+
+                onShareItem(imageView);
+            }
+        });
+
     }
 
     private void saveImageToGallery() {
@@ -217,36 +237,41 @@ public class MainScreen extends Activity {
             sliderBrihtness.setY(sliderBrightnessPos);
             sliderTileSize.setY(sliderTileSizePos);
             sliderSaturation.setY(sliderSaturationPos);
-            buttonSettings.setY(settingsButtonPos);
-            buttonApply.setY(applyButtonPos);
+            buttonSettings.setY(buttonSettingsPos);
+            buttonApply.setY(buttonApplyPos);
+            buttonShare.setY(buttonSharePos);
 
-            //TODO set hue slider to the right spot
             sliderHue.setValue(MapParams.hue);
             sliderBrihtness.setValue(MapParams.brightness);
             sliderTileSize.setValue(MapParams.tileSize);
             sliderSaturation.setValue(MapParams.saturation);
 
-            buttonSettings.hideMe(settingsButtonPos + buttonSettings.getHeight());
-            buttonApply.hideMe(applyButtonPos + buttonApply.getHeight());
-            sliderHue.showMe(settingsButtonPos);
-            sliderBrihtness.showMe(settingsButtonPos);
-            sliderTileSize.showMe(settingsButtonPos);
-            sliderSaturation.showMe(settingsButtonPos);
+            buttonSettings.hideMe(buttonSettingsPos + buttonSettings.getHeight());
+            buttonApply.hideMe(buttonSettingsPos + buttonApply.getHeight());
+            buttonShare.hideMe(buttonApplyPos + buttonShare.getHeight());
+            sliderHue.showMe(buttonSettingsPos);
+            sliderBrihtness.showMe(buttonSettingsPos);
+            sliderTileSize.showMe(buttonSettingsPos);
+            sliderSaturation.showMe(buttonSettingsPos);
             slidersVisible = true;
         }
     }
 
     private void dismissSliders() {
         if (slidersVisible) {
-            buttonSettings.setY(settingsButtonPos);
-            buttonSettings.showMe(settingsButtonPos + buttonSettings.getHeight());
+            buttonSettings.setY(buttonSettingsPos);
+            buttonSettings.showMe(buttonSettingsPos + buttonSettings.getHeight());
 
-            buttonApply.setY(applyButtonPos);
-            buttonApply.showMe(applyButtonPos + buttonApply.getHeight());
-            sliderHue.hideMe(settingsButtonPos);
-            sliderBrihtness.hideMe(settingsButtonPos);
-            sliderTileSize.hideMe(settingsButtonPos);
-            sliderSaturation.hideMe(settingsButtonPos);
+            buttonApply.setY(buttonApplyPos);
+            buttonApply.showMe(buttonApplyPos + buttonApply.getHeight());
+
+            buttonShare.setY(buttonSharePos);
+            buttonShare.showMe(buttonSharePos + buttonShare.getHeight());
+
+            sliderHue.hideMe(buttonSettingsPos);
+            sliderBrihtness.hideMe(buttonSettingsPos);
+            sliderTileSize.hideMe(buttonSettingsPos);
+            sliderSaturation.hideMe(buttonSettingsPos);
             slidersVisible = false;
         }
 
@@ -327,6 +352,51 @@ public class MainScreen extends Activity {
         int newWidth = bitmap.getWidth() * k;
         int newHeight = bitmap.getHeight() * k;
         return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, false);
+    }
+
+
+    // Can be triggered by a view event such as a button press
+    public void onShareItem(ImageView v) {
+        Uri bmpUri = getLocalBitmapUri(v);
+        if (bmpUri != null) {
+            // Construct a ShareIntent with link to image
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
+            shareIntent.setType("image/*");
+            // Launch sharing dialog for image
+            startActivity(Intent.createChooser(shareIntent, "Share Image"));
+        } else {
+            Log.i("onShare", "Sharing Fucked!");
+
+            // ...sharing failed, handle error
+        }
+    }
+
+    // Returns the URI path to the Bitmap displayed in specified ImageView
+    public Uri getLocalBitmapUri(ImageView imageView) {
+        // Extract Bitmap from ImageView drawable
+        Drawable drawable = imageView.getDrawable();
+        Bitmap bmp = null;
+        if (drawable instanceof BitmapDrawable){
+            bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        } else {
+            return null;
+        }
+        // Store image to default external storage directory
+        Uri bmpUri = null;
+        try {
+            File file =  new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DOWNLOADS), "share_image_" + System.currentTimeMillis() + ".png");
+            file.getParentFile().mkdirs();
+            FileOutputStream out = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.close();
+            bmpUri = Uri.fromFile(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bmpUri;
     }
 
 }
