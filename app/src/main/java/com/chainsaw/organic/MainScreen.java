@@ -57,7 +57,7 @@ public class MainScreen extends Activity {
     ButtonFloat buttonApply;
     ButtonFloat buttonShare;
     HueSlider sliderHue;
-    ValueSlider sliderBrihtness;
+    ValueSlider sliderBrightness;
     ValueSlider sliderTileSize;
     ValueSlider sliderSaturation;
 
@@ -102,18 +102,18 @@ public class MainScreen extends Activity {
         buttonApply = (ButtonFloat) findViewById(R.id.buttonApply);
         buttonShare = (ButtonFloat) findViewById(R.id.buttonShare);
         sliderHue = (HueSlider) findViewById(R.id.bt0);
-        sliderBrihtness = (ValueSlider) findViewById(R.id.bt1);
+        sliderBrightness = (ValueSlider) findViewById(R.id.bt1);
         sliderTileSize = (ValueSlider) findViewById(R.id.bt3);
         sliderSaturation = (ValueSlider) findViewById(R.id.bt2);
 
         sliderHue.setVisibility(View.INVISIBLE);
 
-        sliderBrihtness.setVisibility(View.INVISIBLE);
+        sliderBrightness.setVisibility(View.INVISIBLE);
         sliderTileSize.setVisibility(View.INVISIBLE);
         sliderSaturation.setVisibility(View.INVISIBLE);
 
-        sliderBrihtness.setMin(MapParams.MIN_BRIGHTNESS);
-        sliderBrihtness.setMax(MapParams.MAX_BRIGHTNESS);  //Brightness
+        sliderBrightness.setMin(MapParams.MIN_BRIGHTNESS);
+        sliderBrightness.setMax(MapParams.MAX_BRIGHTNESS);  //Brightness
 
         sliderSaturation.setMax(100);
 
@@ -139,9 +139,11 @@ public class MainScreen extends Activity {
                 buttonSharePos = buttonShare.getY();
 
                 sliderHuePos = sliderHue.getY();
-                sliderBrightnessPos = sliderBrihtness.getY();
+                sliderBrightnessPos = sliderBrightness.getY();
                 sliderTileSizePos = sliderTileSize.getY();
                 sliderSaturationPos = sliderSaturation.getY();
+
+                generateNoise();
             }
         });
 
@@ -163,7 +165,7 @@ public class MainScreen extends Activity {
             }
         });
 
-        sliderBrihtness.setOnValueChangedListener(new Slider.OnValueChangedListener() {
+        sliderBrightness.setOnValueChangedListener(new Slider.OnValueChangedListener() {
             @Override
             public void onValueChanged(int value) {
                 MapParams.brightness = value;
@@ -183,7 +185,7 @@ public class MainScreen extends Activity {
         buttonSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (sliderBrihtness.getVisibility() != View.VISIBLE) {
+                if (sliderBrightness.getVisibility() != View.VISIBLE) {
                     showSliders();
                 }
             }
@@ -214,10 +216,10 @@ public class MainScreen extends Activity {
             try {
                 WallpaperManager.getInstance(this).setBitmap(wall_bitmap);
             } catch (IOException e) {
-                Toast.makeText(MainScreen.this, "Fucked! ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainScreen.this, "Unable to set Wallpaper :( ", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
-            Toast.makeText(MainScreen.this, "saved! ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainScreen.this, "Wallpaper set! ", Toast.LENGTH_SHORT).show();
             wall_bitmap.recycle();
         }
     }
@@ -234,7 +236,7 @@ public class MainScreen extends Activity {
     private void showSliders() {
         if (!slidersVisible) {
             sliderHue.setY(sliderHuePos);
-            sliderBrihtness.setY(sliderBrightnessPos);
+            sliderBrightness.setY(sliderBrightnessPos);
             sliderTileSize.setY(sliderTileSizePos);
             sliderSaturation.setY(sliderSaturationPos);
             buttonSettings.setY(buttonSettingsPos);
@@ -242,15 +244,15 @@ public class MainScreen extends Activity {
             buttonShare.setY(buttonSharePos);
 
             sliderHue.setValue(MapParams.hue);
-            sliderBrihtness.setValue(MapParams.brightness);
+            sliderBrightness.setValue(MapParams.brightness);
             sliderTileSize.setValue(MapParams.tileSize);
             sliderSaturation.setValue(MapParams.saturation);
 
-            buttonSettings.hideMe(buttonSettingsPos + buttonSettings.getHeight());
-            buttonApply.hideMe(buttonSettingsPos + buttonApply.getHeight());
-            buttonShare.hideMe(buttonApplyPos + buttonShare.getHeight());
+            buttonSettings.hideMe(buttonSettingsPos);
+            buttonApply.hideMe(buttonSettingsPos);
+            buttonShare.hideMe(buttonSettingsPos);
             sliderHue.showMe(buttonSettingsPos);
-            sliderBrihtness.showMe(buttonSettingsPos);
+            sliderBrightness.showMe(buttonSettingsPos);
             sliderTileSize.showMe(buttonSettingsPos);
             sliderSaturation.showMe(buttonSettingsPos);
             slidersVisible = true;
@@ -269,7 +271,7 @@ public class MainScreen extends Activity {
             buttonShare.showMe(buttonSharePos + buttonShare.getHeight());
 
             sliderHue.hideMe(buttonSettingsPos);
-            sliderBrihtness.hideMe(buttonSettingsPos);
+            sliderBrightness.hideMe(buttonSettingsPos);
             sliderTileSize.hideMe(buttonSettingsPos);
             sliderSaturation.hideMe(buttonSettingsPos);
             slidersVisible = false;
@@ -278,8 +280,6 @@ public class MainScreen extends Activity {
     }
 
     private void generateNoise() {
-        Log.i("Generator", "Started generation...");
-
         int x = MapParams.tileSize;
         int y = x;
 
@@ -327,7 +327,7 @@ public class MainScreen extends Activity {
 
                 float hsv[] = new float[3];
                 Color.colorToHSV(RGB, hsv);
-                hsv[1] = hsv[1] * (((float) sliderSaturation.getValue()) / 100);
+                hsv[1] = hsv[1] * (((float) MapParams.saturation) / 100);
                 RGB = Color.HSVToColor(hsv);
 
 
@@ -337,8 +337,6 @@ public class MainScreen extends Activity {
 
         imageView.setImageBitmap(scaleToFit(bitmap, screenWidth, screenHeight));
         bitmap.recycle();
-        Log.i("Generator", "DONE!!!");
-
     }
 
 
@@ -367,9 +365,7 @@ public class MainScreen extends Activity {
             // Launch sharing dialog for image
             startActivity(Intent.createChooser(shareIntent, "Share Image"));
         } else {
-            Log.i("onShare", "Sharing Fucked!");
-
-            // ...sharing failed, handle error
+            Toast.makeText(this, "Sorry, can't share! :(", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -378,7 +374,7 @@ public class MainScreen extends Activity {
         // Extract Bitmap from ImageView drawable
         Drawable drawable = imageView.getDrawable();
         Bitmap bmp = null;
-        if (drawable instanceof BitmapDrawable){
+        if (drawable instanceof BitmapDrawable) {
             bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
         } else {
             return null;
@@ -386,11 +382,11 @@ public class MainScreen extends Activity {
         // Store image to default external storage directory
         Uri bmpUri = null;
         try {
-            File file =  new File(Environment.getExternalStoragePublicDirectory(
+            File file = new File(Environment.getExternalStoragePublicDirectory(
                     Environment.DIRECTORY_DOWNLOADS), "share_image_" + System.currentTimeMillis() + ".png");
             file.getParentFile().mkdirs();
             FileOutputStream out = new FileOutputStream(file);
-            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
             out.close();
             bmpUri = Uri.fromFile(file);
         } catch (IOException e) {
