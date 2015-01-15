@@ -202,8 +202,6 @@ public class MainScreen extends Activity {
         buttonShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO SHARE ACTION
-
                 onShareItem(imageView);
             }
         });
@@ -320,16 +318,10 @@ public class MainScreen extends Activity {
                 //   int RGB = 0xFF000000 | red | green | blue;
                 int RGB = sliderHue.getColor(MapParams.hue) ^ (red | green | blue);
 
-
-                //
-                // TODO try to adjust saturation
-                //
-
                 float hsv[] = new float[3];
                 Color.colorToHSV(RGB, hsv);
                 hsv[1] = hsv[1] * (((float) MapParams.saturation) / 100);
                 RGB = Color.HSVToColor(hsv);
-
 
                 bitmap.setPixel(i, j, RGB);
             }
@@ -361,6 +353,7 @@ public class MainScreen extends Activity {
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
             shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "Wallpaper created with OrganicPixel Wallpaper generator");
             shareIntent.setType("image/*");
             // Launch sharing dialog for image
             startActivity(Intent.createChooser(shareIntent, "Share Image"));
@@ -383,7 +376,7 @@ public class MainScreen extends Activity {
         Uri bmpUri = null;
         try {
             File file = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_DOWNLOADS), "share_image_" + System.currentTimeMillis() + ".png");
+                    Environment.DIRECTORY_DOWNLOADS), "organic_pixel_" + System.currentTimeMillis() + ".png");
             file.getParentFile().mkdirs();
             FileOutputStream out = new FileOutputStream(file);
             bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
