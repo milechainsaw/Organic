@@ -9,18 +9,20 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainScreen">
+
     <com.andexert.library.RippleView
         android:id="@+id/more"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="0dp"
         ripple:rv_centered="false">
-    <ImageView
-        android:id="@+id/imgViewDisplay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+
+        <ImageView
+            android:id="@+id/imgViewDisplay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
     </com.andexert.library.RippleView>
 
     <com.gc.materialdesign.views.ButtonFloat
@@ -29,11 +31,13 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginBottom="24dp"
         android:layout_marginRight="24dp"
+        android:layout_marginEnd="24dp"
         android:background="#1E88E5"
         materialdesign:animate="true"
-        materialdesign:iconFloat="@drawable/ic_action_settings"/>
+        materialdesign:iconFloat="@drawable/ic_action_settings" />
 
     <com.gc.materialdesign.views.ButtonFloat
         android:id="@+id/buttonApply"
@@ -41,11 +45,13 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/buttonSettings"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginBottom="24dp"
         android:layout_marginRight="24dp"
+        android:layout_marginEnd="24dp"
         android:background="#1E88E5"
         materialdesign:animate="true"
-        materialdesign:iconFloat="@drawable/ic_action_accept"/>
+        materialdesign:iconFloat="@drawable/ic_action_accept" />
 
 
     <com.chainsaw.organic.widgets.HueSlider
@@ -63,8 +69,7 @@
         android:id="@+id/bt1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/buttonSettings"
-        android:layout_alignParentRight="true"
+        android:layout_above="@id/bt0"
         android:layout_marginBottom="24dp"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
@@ -75,7 +80,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/bt1"
-        android:layout_alignParentRight="true"
+        android:layout_marginBottom="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:background="#1E88E5" />
+
+    <com.chainsaw.organic.widgets.ValueSlider
+        android:id="@+id/bt3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bt2"
         android:layout_marginBottom="24dp"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"

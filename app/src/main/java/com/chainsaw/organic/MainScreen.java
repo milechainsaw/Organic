@@ -2,15 +2,12 @@ package com.chainsaw.organic;
 
 import android.app.Activity;
 import android.app.WallpaperManager;
-import android.content.ContentValues;
-import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -20,7 +17,6 @@ import android.widget.Toast;
 
 import com.chainsaw.organic.math.NoiseGenerator;
 import com.chainsaw.organic.math.NoiseMap;
-import com.chainsaw.organic.utils.SavePhotoUtils;
 import com.chainsaw.organic.widgets.HueSlider;
 import com.chainsaw.organic.widgets.ValueSlider;
 import com.gc.materialdesign.views.ButtonFloat;
@@ -35,9 +31,15 @@ public class MainScreen extends Activity {
 
     //VALUES
     private static class MapParams {
-        static int tintColor = 0xFFFFFFFF;
+        final static int MIN_BRIGHTNESS = 0;
+        final static int MAX_BRIGHTNESS = 100;
+        final static int MIN_TILESIZE = 2;
+        final static int MAX_TILESIZE = 50;
+
+        static int hue = 100;
         static int tileSize = 15;
-        static int brightness = 100; // value is between 0-100
+        static int brightness = 80; // value is between 0-100
+        static int saturation = 100;
     }
 
     ImageView imageView;
@@ -47,16 +49,19 @@ public class MainScreen extends Activity {
     // UI elements
     ButtonFloat buttonSettings;
     ButtonFloat buttonApply;
-    HueSlider slider0;
-    ValueSlider slider1;
-    ValueSlider slider2;
+    HueSlider sliderHue;
+    ValueSlider sliderBrihtness;
+    ValueSlider sliderTileSize;
+    ValueSlider sliderSaturation;
+
 
     //UI help
     float settingsButtonPos;
     float applyButtonPos;
-    float slider0pos;
-    float slider1pos;
-    float slider2pos;
+    float sliderHuePos;
+    float sliderBrightnessPos;
+    float sliderTileSizePos;
+    float sliderSaturationPos;
     boolean slidersVisible;
 
     private NoiseMap rawMap;
@@ -76,24 +81,35 @@ public class MainScreen extends Activity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dismissSliders();
-                generateNoise();
+                if (slidersVisible) {
+                    dismissSliders();
+                } else {
+                    generateNoise();
+                }
             }
         });
 
 
         buttonSettings = (ButtonFloat) findViewById(R.id.buttonSettings);
         buttonApply = (ButtonFloat) findViewById(R.id.buttonApply);
-        slider0 = (HueSlider) findViewById(R.id.bt0);
-        slider1 = (ValueSlider) findViewById(R.id.bt1);
-        slider2 = (ValueSlider) findViewById(R.id.bt2);
+        sliderHue = (HueSlider) findViewById(R.id.bt0);
+        sliderBrihtness = (ValueSlider) findViewById(R.id.bt1);
+        sliderTileSize = (ValueSlider) findViewById(R.id.bt3);
+        sliderSaturation = (ValueSlider) findViewById(R.id.bt2);
 
-        slider0.setVisibility(View.INVISIBLE);
-        slider1.setVisibility(View.INVISIBLE);
-        slider2.setVisibility(View.INVISIBLE);
+        sliderHue.setVisibility(View.INVISIBLE);
 
-        slider1.setMax(100);  //Brightness
-        slider2.setMax(300);  //Complexity
+        sliderBrihtness.setVisibility(View.INVISIBLE);
+        sliderTileSize.setVisibility(View.INVISIBLE);
+        sliderSaturation.setVisibility(View.INVISIBLE);
+
+        sliderBrihtness.setMin(MapParams.MIN_BRIGHTNESS);
+        sliderBrihtness.setMax(MapParams.MAX_BRIGHTNESS);  //Brightness
+
+        sliderSaturation.setMax(100);
+
+        sliderTileSize.setMin(MapParams.MIN_TILESIZE);
+        sliderTileSize.setMax(MapParams.MAX_TILESIZE);  //Complexity
 
 
         slidersVisible = false;
@@ -111,25 +127,32 @@ public class MainScreen extends Activity {
                 settingsButtonPos = buttonSettings.getY();
                 applyButtonPos = buttonApply.getY();
 
-                slider0pos = slider0.getY();
-                slider1pos = slider1.getY();
-                slider2pos = slider2.getY();
-                Toast.makeText(MainScreen.this, "=" + slider1pos, Toast.LENGTH_SHORT).show();
-
+                sliderHuePos = sliderHue.getY();
+                sliderBrightnessPos = sliderBrihtness.getY();
+                sliderTileSizePos = sliderTileSize.getY();
+                sliderSaturationPos = sliderSaturation.getY();
             }
         });
 
-        slider0.setOnValueChangedListener(new Slider.OnValueChangedListener() {
+        sliderSaturation.setOnValueChangedListener(new Slider.OnValueChangedListener() {
             @Override
             public void onValueChanged(int value) {
-                MapParams.tintColor = 0xFFFFFFFF & slider0.getColor(value);
-                slider0.setBackgroundColor(slider0.getColor(value));
+                MapParams.saturation = value;
+                generateBitmap();
+            }
+        });
+
+        sliderHue.setOnValueChangedListener(new Slider.OnValueChangedListener() {
+            @Override
+            public void onValueChanged(int value) {
+                MapParams.hue = value;
+                sliderHue.setBackgroundColor(sliderHue.getColor(value));
                 generateBitmap();
 
             }
         });
 
-        slider1.setOnValueChangedListener(new Slider.OnValueChangedListener() {
+        sliderBrihtness.setOnValueChangedListener(new Slider.OnValueChangedListener() {
             @Override
             public void onValueChanged(int value) {
                 MapParams.brightness = value;
@@ -137,7 +160,7 @@ public class MainScreen extends Activity {
             }
         });
 
-        slider2.setOnValueChangedListener(new Slider.OnValueChangedListener() {
+        sliderTileSize.setOnValueChangedListener(new Slider.OnValueChangedListener() {
             @Override
             public void onValueChanged(int value) {
                 MapParams.tileSize = value + 2; // offset for 0
@@ -149,7 +172,7 @@ public class MainScreen extends Activity {
         buttonSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (slider1.getVisibility() != View.VISIBLE) {
+                if (sliderBrihtness.getVisibility() != View.VISIBLE) {
                     showSliders();
                 }
             }
@@ -190,22 +213,25 @@ public class MainScreen extends Activity {
 
     private void showSliders() {
         if (!slidersVisible) {
-            slider0.setY(slider0pos);
-            slider1.setY(slider1pos);
-            slider2.setY(slider2pos);
+            sliderHue.setY(sliderHuePos);
+            sliderBrihtness.setY(sliderBrightnessPos);
+            sliderTileSize.setY(sliderTileSizePos);
+            sliderSaturation.setY(sliderSaturationPos);
             buttonSettings.setY(settingsButtonPos);
             buttonApply.setY(applyButtonPos);
 
             //TODO set hue slider to the right spot
-
-            slider1.setValue(MapParams.brightness);
-            slider2.setValue(MapParams.tileSize);
+            sliderHue.setValue(MapParams.hue);
+            sliderBrihtness.setValue(MapParams.brightness);
+            sliderTileSize.setValue(MapParams.tileSize);
+            sliderSaturation.setValue(MapParams.saturation);
 
             buttonSettings.hideMe(settingsButtonPos + buttonSettings.getHeight());
             buttonApply.hideMe(applyButtonPos + buttonApply.getHeight());
-            slider0.showMe(settingsButtonPos);
-            slider1.showMe(settingsButtonPos);
-            slider2.showMe(settingsButtonPos);
+            sliderHue.showMe(settingsButtonPos);
+            sliderBrihtness.showMe(settingsButtonPos);
+            sliderTileSize.showMe(settingsButtonPos);
+            sliderSaturation.showMe(settingsButtonPos);
             slidersVisible = true;
         }
     }
@@ -217,9 +243,10 @@ public class MainScreen extends Activity {
 
             buttonApply.setY(applyButtonPos);
             buttonApply.showMe(applyButtonPos + buttonApply.getHeight());
-            slider0.hideMe(settingsButtonPos);
-            slider1.hideMe(settingsButtonPos);
-            slider2.hideMe(settingsButtonPos);
+            sliderHue.hideMe(settingsButtonPos);
+            sliderBrihtness.hideMe(settingsButtonPos);
+            sliderTileSize.hideMe(settingsButtonPos);
+            sliderSaturation.hideMe(settingsButtonPos);
             slidersVisible = false;
         }
 
@@ -266,7 +293,19 @@ public class MainScreen extends Activity {
                 blue = blue & 0x000000FF;
 
                 //   int RGB = 0xFF000000 | red | green | blue;
-                int RGB = MapParams.tintColor ^ (red | green | blue);
+                int RGB = sliderHue.getColor(MapParams.hue) ^ (red | green | blue);
+
+
+                //
+                // TODO try to adjust saturation
+                //
+
+                float hsv[] = new float[3];
+                Color.colorToHSV(RGB, hsv);
+                hsv[1] = hsv[1] * (((float) sliderSaturation.getValue()) / 100);
+                RGB = Color.HSVToColor(hsv);
+
+
                 bitmap.setPixel(i, j, RGB);
             }
         }
@@ -287,7 +326,6 @@ public class MainScreen extends Activity {
         }
         int newWidth = bitmap.getWidth() * k;
         int newHeight = bitmap.getHeight() * k;
-        Log.i("Scaler", "x=" + newWidth + " y=" + newHeight);
         return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, false);
     }
 
